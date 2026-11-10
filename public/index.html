@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to GO Pixiedust - K-Pop Group Order Hub</title>
+    <script>try { document.documentElement.classList.toggle('dark', localStorage.getItem('pixiedust-theme') !== 'light'); } catch {}</script>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        pixie: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            200: '#ddd6fe',
+                            300: '#c4b5fd',
+                            400: '#a78bfa',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                            700: '#6d28d9',
+                            800: '#5b21b6',
+                            900: '#4c1d95',
+                            darkbg: '#0a0814',
+                            darkcard: '#161226',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Dark mode visual styling */
+        .dark body {
+            background-color: #0a0814;
+            color: #f3f4f6;
+        }
+        .dark .glass-panel {
+            background: rgba(22, 18, 38, 0.88);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(167, 139, 250, 0.22);
+        }
+        .dark .glass-card {
+            background: rgba(30, 24, 52, 0.75);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(196, 181, 253, 0.15);
+        }
+        
+        /* Light mode with ULTRA-CLEAR high contrast readability */
+        html:not(.dark) body {
+            background-color: #f1ecfe;
+            color: #120924;
+        }
+        html:not(.dark) body .glass-panel {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(14px);
+            border: 1.5px solid rgba(109, 40, 217, 0.35);
+            box-shadow: 0 10px 30px -5px rgba(109, 40, 217, 0.15);
+        }
+        html:not(.dark) body .glass-card {
+            background: #ffffff;
+            border: 1.5px solid rgba(139, 92, 246, 0.28);
+            box-shadow: 0 4px 15px -2px rgba(109, 40, 217, 0.08);
+        }
+        html:not(.dark) body .text-muted-custom {
+            color: #44394f !important;
+        }
+        html:not(.dark) body .card-header-title {
+            color: #17131c !important;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #7c3aed 0%, #d946ef 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gradient-btn {
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+        }
+        .gradient-btn:hover {
+            background: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%);
+        }
+
+        /* Y2K Butterfly Logo Glow Effect */
+        .y2k-logo-glow {
+            filter: drop-shadow(0 0 10px rgba(167, 139, 250, 0.7));
+        }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #7c3aed; border-radius: 4px; }
+    </style>
+<link rel="icon" href="/assets/pixiedust-logo.webp" type="image/webp">
+<link rel="stylesheet" href="/theme.css">
+<style>
+.pixie-input{display:block;width:100%;border:1px solid #a78bfa70;border-radius:12px;padding:10px;margin-top:5px;background:#f9f5ff;color:#302343;font-size:13px}.pixie-button{border-radius:12px;padding:10px 16px;background:#6d3d94;color:white;font-weight:700;font-size:12px;transition:transform .2s}.pixie-button:hover{transform:translateY(-2px);background:#8550ae}button:disabled{opacity:.5;cursor:wait}.pixie-dialog{border:1px solid #aa88bb;border-radius:24px;padding:24px;width:min(680px,94vw);max-height:85vh;background:#fcf8ff;color:#302343}.pixie-dialog::backdrop{background:#201329aa;backdrop-filter:blur(6px)}.story-photo{width:100%;max-height:360px;object-fit:contain;background:#eee5f6;border-radius:12px}#app-message:empty{display:none}
+</style><link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/assets/pixiedust-icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#b69bc9">
+</head>
+<body class="min-h-screen pb-16 flex flex-col">
+
+    <!-- AUDIO ALARM SOUND SYNTHESIZER (TONE.JS LIKE AUDIO CONTEXT) -->
+    <script>
+        function playReminderAlarm() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime); // A5 note
+                osc.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.5);
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.5);
+                alert("⏰ [ALARM REMINDER GO PIXIEDUST]\nJangan lupa lunasi tagihan tax / DP sebelum batas 1x24 jam untuk menghindari denda Rp 2.000/hari!");
+            } catch(e) {
+                alert("⏰ Reminder Tagihan: Harap periksa status pelunasan jajanan kamu!");
+            }
+        }
+    </script>
+
+    <!-- NOTIFICATION & ALARM BANNER -->
+    <div id="tax-notification-banner" class="bg-gradient-to-r from-purple-900 via-pixie-600 to-pink-600 text-white px-4 py-2.5 text-xs font-semibold relative flex items-center justify-between shadow-lg">
+        <div class="max-w-7xl mx-auto flex items-center justify-between w-full">
+            <div class="flex items-center gap-2">
+                <span class="animate-pulse bg-amber-400 text-slate-950 font-extrabold px-2 py-0.5 rounded text-[10px]">INFO TAGIHAN</span>
+                <span><i class="fa-solid fa-bell mr-1"></i> Cek rekapan jajananmu. Operslot wajib mendapat konfirmasi owner Zeazee.</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="playReminderAlarm()" class="bg-amber-400 hover:bg-amber-300 text-slate-950 px-2.5 py-1 rounded-lg text-[11px] font-extrabold shadow flex items-center gap-1 transition">
+                    <i class="fa-solid fa-clock"></i> Pasang Reminder
+                </button>
+                <button onclick="closeBanner()" class="hover:text-amber-200 text-sm"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOP NAVIGATION BAR -->
+    <nav class="sticky top-0 z-40 glass-panel px-4 lg:px-8 py-3 border-b">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <!-- Brand Logo & Y2K Emblem -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('dashboard')">
+                <img src="/assets/pixiedust-logo.webp" alt="Logo PixieDust" width="64" height="64" class="brand-logo" fetchpriority="high">
+                <div>
+                    <h1 class="text-xl font-extrabold tracking-wide gradient-text font-serif">PixieDust</h1>
+                    <p class="text-[10px] text-pixie-600 dark:text-pixie-300 font-extrabold tracking-wider uppercase">Welcome to GO Pixiedust</p>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="hidden lg:flex items-center gap-1 bg-pixie-100 dark:bg-pixie-darkbg/80 p-1.5 rounded-full border border-pixie-500/20">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active px-4 py-1.5 rounded-full text-xs font-bold transition text-white bg-pixie-600">
+                    <i class="fa-solid fa-house mr-1"></i> Home
+                </button>
+                <button onclick="switchTab('calculator')" id="nav-calculator" class="nav-btn px-4 py-1.5 rounded-full text-xs font-bold transition text-pixie-900 dark:text-pixie-300 hover:bg-pixie-200 dark:hover:bg-pixie-800/50">
+                    <i class="fa-solid fa-calculator mr-1"></i> Kalkulator
+                </button>
+                <button onclick="switchTab('recap')" id="nav-recap" class="nav-btn px-4 py-1.5 rounded-full text-xs font-bold transition text-pixie-900 dark:text-pixie-300 hover:bg-pixie-200 dark:hover:bg-pixie-800/50">
+                    <i class="fa-solid fa-box-open mr-1"></i> Jajanan
+                </button>
+<button onclick="switchTab('tax')" id="nav-tax" class="nav-btn px-4 py-1.5 rounded-full text-xs font-bold text-pixie-900 dark:text-pixie-300"><i class="fa-solid fa-receipt mr-1"></i>Tagihan Tax</button>
+
+                <button onclick="switchTab('tnc')" id="nav-tnc" class="nav-btn px-4 py-1.5 rounded-full text-xs font-bold transition text-pixie-900 dark:text-pixie-300 hover:bg-pixie-200 dark:hover:bg-pixie-800/50">
+                    <i class="fa-solid fa-scroll mr-1"></i> Rules
+                </button>
+<button onclick="switchTab('merch')" id="nav-merch" class="nav-btn px-4 py-1.5 rounded-full text-xs font-bold text-pixie-900 dark:text-pixie-300"><i class="fa-solid fa-bag-shopping mr-1"></i>Merch Available</button>
+                <button onclick="switchTab('faq')" id="nav-faq" class="nav-btn px-4 py-1.5 rounded-full text-xs font-bold transition text-pixie-900 dark:text-pixie-300 hover:bg-pixie-200 dark:hover:bg-pixie-800/50">
+                    <i class="fa-solid fa-circle-question mr-1"></i> FAQ
+                </button>
+
+            </div>
+
+            <!-- Right Actions: Theme Toggle, Admin Controls, User Profile -->
+            <div class="flex items-center gap-2">
+                <button onclick="toggleDarkMode()" id="theme-toggle" aria-label="Ganti tema terang atau gelap" aria-pressed="true" title="Ganti tema" class="p-2 rounded-xl bg-pixie-200 dark:bg-pixie-800 text-pixie-800 dark:text-pixie-200 hover:scale-105 transition">
+                    <i id="theme-icon" class="fa-solid fa-moon text-sm"></i>
+                </button>
+
+                <!-- Personal Order via LINE Button -->
+                <a href="https://line.me/R/ti/p/@pixiedust_go" target="_blank" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold flex items-center gap-1 shadow-md transition">
+                    <i class="fa-brands fa-line text-sm"></i> <span class="hidden sm:inline">Pers-Order LINE</span>
+                </a>
+
+                <!-- User Account Switcher -->
+                <button onclick="openLoginModal()" id="user-profile-btn" class="px-3 py-1.5 rounded-xl gradient-btn text-white text-xs font-bold flex items-center gap-1.5 shadow-md">
+                    <i class="fa-solid fa-user-check"></i> <span id="current-user-name" class="hidden sm:inline">Pengunjung</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <div class="lg:hidden fixed bottom-0 left-0 right-0 z-40 glass-panel border-t py-2 px-3 flex justify-around text-[10px] font-bold">
+        <button onclick="switchTab('dashboard')" class="flex flex-col items-center text-pixie-600 dark:text-pixie-300"><i class="fa-solid fa-house text-base"></i>Home</button>
+        <button onclick="switchTab('calculator')" class="flex flex-col items-center text-pixie-600 dark:text-pixie-300"><i class="fa-solid fa-calculator text-base"></i>Kalkulator</button>
+        <button onclick="switchTab('recap')" class="flex flex-col items-center text-pixie-600 dark:text-pixie-300"><i class="fa-solid fa-box-open text-base"></i>Jajanan</button>
+        <button onclick="switchTab('tax')" class="flex flex-col items-center text-pixie-600 dark:text-pixie-300"><i class="fa-solid fa-receipt text-base"></i>Tagihan Tax</button>
+
+        <button onclick="switchTab('tnc')" class="flex flex-col items-center text-pixie-600 dark:text-pixie-300"><i class="fa-solid fa-scroll text-base"></i>Rules</button>
+        <button onclick="switchTab('merch')" class="flex flex-col items-center text-pixie-600 dark:text-pixie-300"><i class="fa-solid fa-bag-shopping text-base"></i>Merch Available</button>
+        <button onclick="switchTab('faq')" class="flex flex-col items-center text-pixie-600 dark:text-pixie-300"><i class="fa-solid fa-circle-question text-base"></i>FAQ</button>
+    </div>
+
+    <div class="fairy-garden" aria-hidden="true"><div class="garden-fairy fairy-left"><svg viewBox="0 0 120 150"><path d="M57 65C-5 5 1 86 53 87C-2 100 32 139 59 97M65 65C127 5 121 86 69 87C124 100 90 139 63 97"/><circle cx="61" cy="53" r="8"/><path d="M61 64L49 106H76ZM57 105L47 134M67 105L78 129M55 72L32 65M68 72L88 51"/></svg></div><div class="garden-fairy fairy-bottom"><svg viewBox="0 0 120 150"><path d="M57 65C-5 5 1 86 53 87C-2 100 32 139 59 97M65 65C127 5 121 86 69 87C124 100 90 139 63 97"/><circle cx="61" cy="53" r="8"/><path d="M61 64L49 106H76ZM57 105L47 134M67 105L78 129M55 72L32 65M68 72L88 51"/></svg></div><svg class="pixie-constellation" viewBox="0 0 240 160" focusable="false"><path d="M20 110L65 78L112 96L154 40L212 61"/><g><circle cx="20" cy="110" r="2"/><circle cx="65" cy="78" r="3"/><circle cx="112" cy="96" r="2"/><circle cx="154" cy="40" r="3"/><circle cx="212" cy="61" r="2"/><circle cx="180" cy="126" r="1.5"/><circle cx="35" cy="30" r="1.5"/></g></svg><div class="star-trail"><svg style="--n:0" viewBox="0 0 24 24"><path d="M12 0Q14 10 24 12Q14 14 12 24Q10 14 0 12Q10 10 12 0Z"/></svg><svg style="--n:1" viewBox="0 0 24 24"><path d="M12 0Q14 10 24 12Q14 14 12 24Q10 14 0 12Q10 10 12 0Z"/></svg><svg style="--n:2" viewBox="0 0 24 24"><path d="M12 0Q14 10 24 12Q14 14 12 24Q10 14 0 12Q10 10 12 0Z"/></svg><svg style="--n:3" viewBox="0 0 24 24"><path d="M12 0Q14 10 24 12Q14 14 12 24Q10 14 0 12Q10 10 12 0Z"/></svg><svg style="--n:4" viewBox="0 0 24 24"><path d="M12 0Q14 10 24 12Q14 14 12 24Q10 14 0 12Q10 10 12 0Z"/></svg><svg style="--n:5" viewBox="0 0 24 24"><path d="M12 0Q14 10 24 12Q14 14 12 24Q10 14 0 12Q10 10 12 0Z"/></svg><svg style="--n:6" viewBox="0 0 24 24"><path d="M12 0Q14 10 24 12Q14 14 12 24Q10 14 0 12Q10 10 12 0Z"/></svg><svg style="--n:7" viewBox="0 0 24 24"><path d="M12 0Q14 10 24 12Q14 14 12 24Q10 14 0 12Q10 10 12 0Z"/></svg><svg style="--n:8" viewBox="0 0 24 24"><path d="M12 0Q14 10 24 12Q14 14 12 24Q10 14 0 12Q10 10 12 0Z"/></svg><svg style="--n:9" viewBox="0 0 24 24"><path d="M12 0Q14 10 24 12Q14 14 12 24Q10 14 0 12Q10 10 12 0Z"/></svg><svg style="--n:10" viewBox="0 0 24 24"><path d="M12 0Q14 10 24 12Q14 14 12 24Q10 14 0 12Q10 10 12 0Z"/></svg><svg style="--n:11" viewBox="0 0 24 24"><path d="M12 0Q14 10 24 12Q14 14 12 24Q10 14 0 12Q10 10 12 0Z"/></svg></div></div>
+    <div class="fairy-dust" aria-hidden="true"><svg viewBox="0 0 120 150"><path d="M57 65C-5 5 1 86 53 87C-2 100 32 139 59 97M65 65C127 5 121 86 69 87C124 100 90 139 63 97"/><circle cx="61" cy="53" r="8"/><path d="M61 64L49 106H76ZM57 105L47 134M67 105L78 129M55 72L32 65M68 72L88 51"/></svg><span>✧</span><span>✦</span><span>✧</span></div>
+    <div class="max-w-7xl mx-auto px-4 w-full"><div id="notification-controls" class="glass-card p-4 rounded-2xl hidden"><button class="pixie-button" onclick="enablePush(this)">Aktifkan notifikasi HP / browser</button><button class="text-xs underline" onclick="disablePush(this)">Nonaktifkan di perangkat ini</button><p id="push-status" role="status" class="text-xs mt-2">Reminder pembayaran dan pemberitahuan admin. Di iPhone/iPad, tambahkan website ke Home Screen terlebih dahulu.</p></div></div>
+    <!-- MAIN CONTENT BODY -->
+    <main class="max-w-7xl mx-auto px-4 lg:px-8 pt-6 flex-grow w-full space-y-6">
+
+        <!-- TAB 1: DASHBOARD HOME & LIVE RATES -->
+        <section id="tab-dashboard" class="tab-content space-y-6">
+<section id="owner-activity" class="owner-activity hidden"><div class="flex justify-between items-center gap-3"><h2 class="font-extrabold text-xl">Notifikasi buyer</h2><button class="pixie-button" onclick="toggleChat(true)">Buka kotak chat</button></div><p class="text-xs mt-2">Login, DN LINE, bukti pembayaran, chat, dan testimoni terbaru. Aktifkan notifikasi HP di atas untuk pemberitahuan saat website ditutup.</p><div id="owner-events" class="space-y-3 mt-4" aria-live="polite"></div></section>
+            
+            <div id="app-message" role="status" class="text-sm rounded-xl p-3 bg-purple-100 text-purple-950">Memuat rekapan GO Pixiedust…</div>
+            <div class="brand-welcome glass-panel rounded-3xl">
+                <img src="/assets/pixiedust-logo.webp" alt="PixieDust — GO Pixiedust" width="240" height="240" class="welcome-logo" fetchpriority="high">
+                <div><p class="brand-eyebrow">YOUR LITTLE K-POP UNIVERSE</p><h2>Jajan bareng,<br>bahagia bareng.</h2><p>Welcome to GO Pixiedust<br>We hope you can find your wishlist items here, just like finding your own wings to fly</p></div>
+            </div>
+            <!-- HEADER HERO & GO BRANCH DIVISION -->
+            <div class="glass-panel p-6 rounded-3xl relative overflow-hidden border">
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
+                    <div class="space-y-2 text-center lg:text-left">
+                        <span class="inline-block px-3 py-1 rounded-full text-xs font-extrabold bg-pixie-500/20 text-pixie-700 dark:text-pixie-300 border border-pixie-500/30">
+                            ✨ Group Order & Personal Proxy Service
+                        </span>
+                        <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                            Welcome to <span class="gradient-text font-serif">GO Pixiedust</span>
+                        </h2>
+                        <p class="text-xs text-slate-700 dark:text-pixie-300 max-w-2xl text-muted-custom">
+                            Platform transparansi Group Order K-Pop favoritmu! Dilengkapi perhitungan real-time, sistem tracking status barang 4 negara, serta reminder tagihan aman & terpercaya.
+                        </p>
+                    </div>
+
+                    <!-- GO DIVISION CARDS (GO 1 & GO 2) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full lg:w-auto">
+                        <div class="glass-card p-3.5 rounded-2xl border-l-4 border-l-purple-500">
+                            <span class="text-[10px] font-extrabold text-purple-600 dark:text-purple-300 uppercase block">Go 1 (Multifandom)</span>
+                            <div class="text-xs font-extrabold text-slate-900 dark:text-white mt-0.5">ALD1 • &TEAM • NouerA</div>
+                            <p class="text-[10px] text-slate-600 dark:text-pixie-400 mt-1">Specialized Proxy & Fast EMS</p>
+                        </div>
+                        <div class="glass-card p-3.5 rounded-2xl border-l-4 border-l-pink-500">
+                            <span class="text-[10px] font-extrabold text-pink-600 dark:text-pink-300 uppercase block">GO 2 (SM Stan)</span>
+                            <div class="text-xs font-extrabold text-slate-900 dark:text-white mt-0.5">EXO • aespa • NCT • H2H • RIIZE</div>
+                            <p class="text-[10px] text-slate-600 dark:text-pixie-400 mt-1">Official Merch & POB Hunting</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LIVE GO RATES DASHBOARD (DYNAMIC & EDITABLE BY ADMIN) -->
+            <div class="glass-panel p-6 rounded-3xl border border-pixie-500/30 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-pixie-500/20 pb-3">
+                    <div>
+                        <h3 class="text-base font-extrabold text-slate-900 dark:text-white card-header-title flex items-center gap-2">
+                            <i class="fa-solid fa-coins text-amber-500"></i> Live Kurs Rate GO Tiap Negara
+                        </h3>
+                        <p class="text-xs text-slate-600 dark:text-pixie-300 text-muted-custom">Rate ini disesuaikan berkala mengikuti konversi warehouse internasional & biaya transfer.</p>
+                    </div>
+                    <button onclick="toggleAdminRatePanel()" class="owner-only hidden text-xs font-extrabold text-pixie-600 dark:text-pixie-300 hover:underline flex items-center gap-1">
+                        <i class="fa-solid fa-sliders"></i> Panel Update Rate (Admin)
+                    </button>
+                </div>
+
+                <!-- Rate Cards Display -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                    <div class="glass-card p-4 rounded-2xl border border-purple-500/30 text-center space-y-1">
+                        <span class="text-2xl">🇰🇷</span>
+                        <div class="text-xs font-bold text-slate-600 dark:text-pixie-300">KOREA (KRW)</div>
+                        <div class="text-lg font-extrabold text-slate-900 dark:text-white" id="rate-disp-KR">13.85 IDR</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl border border-red-500/30 text-center space-y-1">
+                        <span class="text-2xl">🇨🇳</span>
+                        <div class="text-xs font-bold text-slate-600 dark:text-pixie-300">CHINA (RMB)</div>
+                        <div class="text-lg font-extrabold text-slate-900 dark:text-white" id="rate-disp-CN">2,730 IDR</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl border border-sky-500/30 text-center space-y-1">
+                        <span class="text-2xl">🇹🇭</span>
+                        <div class="text-xs font-bold text-slate-600 dark:text-pixie-300">THAILAND (THB)</div>
+                        <div class="text-lg font-extrabold text-slate-900 dark:text-white" id="rate-disp-TH">550 IDR</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl border border-rose-500/30 text-center space-y-1">
+                        <span class="text-2xl">🇯🇵</span>
+                        <div class="text-xs font-bold text-slate-600 dark:text-pixie-300">JEPANG (JPY)</div>
+                        <div class="text-lg font-extrabold text-slate-900 dark:text-white" id="rate-disp-JP">118 IDR</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl border border-emerald-500/30 text-center space-y-1 col-span-2 sm:col-span-1">
+                        <span class="text-2xl">🇮🇩</span>
+                        <div class="text-xs font-bold text-slate-600 dark:text-pixie-300">INDONESIA (INA)</div>
+                        <div class="text-lg font-extrabold text-emerald-600 dark:text-emerald-400" id="rate-disp-INA">+Rp 3,000</div>
+                    </div>
+                </div>
+
+                <!-- ADMIN EDITABLE RATE MODAL / PANEL (HIDDEN BY DEFAULT) -->
+                <div id="admin-rate-panel" class="hidden bg-pixie-100 dark:bg-pixie-darkbg/90 p-4 rounded-2xl border border-amber-500/40 space-y-3">
+                    <div class="flex justify-between items-center text-xs font-bold text-amber-600 dark:text-amber-300">
+                        <span><i class="fa-solid fa-lock mr-1"></i> Admin Controls - Update Official Rates</span>
+                        <span class="text-[10px] text-slate-500">Khusus Admin Zeazee</span>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-700 dark:text-pixie-300">Rate KR (Won)</label>
+                            <input type="number" id="inp-rate-KR" value="13.85" step="0.01" class="w-full bg-white dark:bg-pixie-900 border p-1.5 text-xs font-bold rounded-lg text-slate-900 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-700 dark:text-pixie-300">Rate CN (Yuan)</label>
+                            <input type="number" id="inp-rate-CN" value="2730" class="w-full bg-white dark:bg-pixie-900 border p-1.5 text-xs font-bold rounded-lg text-slate-900 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-700 dark:text-pixie-300">Rate TH (Baht)</label>
+                            <input type="number" id="inp-rate-TH" value="550" class="w-full bg-white dark:bg-pixie-900 border p-1.5 text-xs font-bold rounded-lg text-slate-900 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-700 dark:text-pixie-300">Rate JP (Yen)</label>
+                            <input type="number" id="inp-rate-JP" value="118" class="w-full bg-white dark:bg-pixie-900 border p-1.5 text-xs font-bold rounded-lg text-slate-900 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-700 dark:text-pixie-300">Fee INA (IDR)</label>
+                            <input type="number" id="inp-rate-INA" value="3000" class="w-full bg-white dark:bg-pixie-900 border p-1.5 text-xs font-bold rounded-lg text-slate-900 dark:text-white">
+                        </div>
+                    </div>
+                    <button onclick="saveAdminRates()" class="px-4 py-2 rounded-xl gradient-btn text-white text-xs font-extrabold shadow">
+                        Simpan Rate Terbaru
+                    </button>
+                </div>
+            </div>
+
+            <!-- QUICK TRACKING SUMMARY FOR LOGGED IN BUYER -->
+            <div class="glass-panel p-6 rounded-3xl border border-pixie-500/30 space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-base font-extrabold text-slate-900 dark:text-white card-header-title flex items-center gap-2">
+                        <i class="fa-solid fa-box text-pixie-500"></i> Status Jajanan Saya (<span id="user-display-heading" class="text-pixie-600 dark:text-pixie-300 font-mono">Pengunjung</span>)
+                    </h3>
+                    <button onclick="switchTab('recap')" class="text-xs font-bold text-pixie-600 dark:text-pixie-300 hover:underline">
+                        Lihat Rekapan Detail <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="dashboard-user-summary">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+
+            <section class="glass-panel p-6 rounded-3xl space-y-5">
+              <div class="flex flex-wrap justify-between gap-3 items-center"><div><p class="text-xs uppercase tracking-widest">Dari buyer untuk calon jajaners</p><h2 class="font-serif text-2xl font-extrabold mt-2">Little parcels, happy stories ♡</h2></div><button onclick="switchTab('feedback')" class="pixie-button">Lihat semua testimoni ↗</button></div>
+              <div class="review-invite"><div><p class="brand-eyebrow">YOUR STORY, OUR FAIRY DUST</p><h3 class="font-bold text-lg">Gimana pengalaman jajanmu?</h3><p class="text-sm">Bagikan cerita, foto, dan penilaianmu untuk GO Pixiedust.</p></div><button class="pixie-button" onclick="openBuyerReview()">Tulis testimoni & rating</button></div><div id="review-summary" class="review-summary"></div><div id="dashboard-buyer-reviews" class="buyer-review-grid"></div><div id="dashboard-testimonials" class="grid md:grid-cols-3 gap-4"></div>
+              <div class="flex flex-wrap gap-3 text-xs"><a href="https://x.com/jiahaocantik" target="_blank" rel="noopener noreferrer" class="pixie-button">Hubungi Zeazee ↗</a><a href="https://x.com/omagawsh" target="_blank" rel="noopener noreferrer" class="pixie-button">Admin packing Nist ↗</a><a href="https://id.shp.ee/SMLH2oie" target="_blank" rel="noopener noreferrer" class="pixie-button">Toko Shopee ↗</a></div>
+            </section>
+        </section>
+
+        <!-- TAB 2: DUAL-STAGE CALCULATOR (HARGA BERSIH + TAX MERCH) -->
+        <section id="tab-calculator" class="tab-content hidden space-y-6">
+            <div class="glass-panel p-6 rounded-3xl border border-pixie-500/30">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white card-header-title flex items-center gap-2">
+                        <i class="fa-solid fa-calculator text-pixie-500"></i> Kalkulator Clean Price & Estimasi Tax (4 Negara)
+                    </h2>
+                    <p class="text-xs text-slate-700 dark:text-pixie-300 text-muted-custom mt-1">
+                        Hitung estimasi total jajanmu sebelum fix order! Sistem otomatis memasukkan biaya shipping lokal supplier, fee transfer, admin GO, dan tax per gram.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <!-- INPUT FORM CONTROLS -->
+                    <div class="lg:col-span-7 bg-pixie-100/60 dark:bg-pixie-darkbg/80 p-5 rounded-2xl border border-pixie-500/20 space-y-4">
+                        
+                        <!-- Country Origin Buttons -->
+                        <div>
+                            <label class="block text-xs font-extrabold text-slate-900 dark:text-pixie-300 mb-2">1. PILIH NEGARA ASAL (ORIGIN)</label>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <button type="button" onclick="selectCalcCountry('KR')" id="c-btn-KR" class="c-select-btn p-3 rounded-xl border text-center flex flex-col items-center bg-pixie-600 text-white font-bold">
+                                    <span class="text-2xl">🇰🇷</span>
+                                    <span class="text-xs">Korea</span>
+                                </button>
+                                <button type="button" onclick="selectCalcCountry('CN')" id="c-btn-CN" class="c-select-btn p-3 rounded-xl border text-center flex flex-col items-center bg-pixie-200 dark:bg-pixie-900/40 text-slate-900 dark:text-pixie-300 border-pixie-500/30 font-bold">
+                                    <span class="text-2xl">🇨🇳</span>
+                                    <span class="text-xs">China</span>
+                                </button>
+                                <button type="button" onclick="selectCalcCountry('JP')" id="c-btn-JP" class="c-select-btn p-3 rounded-xl border text-center flex flex-col items-center bg-pixie-200 dark:bg-pixie-900/40 text-slate-900 dark:text-pixie-300 border-pixie-500/30 font-bold">
+                                    <span class="text-2xl">🇯🇵</span>
+                                    <span class="text-xs">Jepang</span>
+                                </button>
+                                <button type="button" onclick="selectCalcCountry('TH')" id="c-btn-TH" class="c-select-btn p-3 rounded-xl border text-center flex flex-col items-center bg-pixie-200 dark:bg-pixie-900/40 text-slate-900 dark:text-pixie-300 border-pixie-500/30 font-bold">
+                                    <span class="text-2xl">🇹🇭</span>
+                                    <span class="text-xs">Thailand</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Merch Category Selector -->
+                        <div>
+                            <label class="block text-xs font-extrabold text-slate-900 dark:text-pixie-300 mb-1">2. JENIS MERCHANDISE</label>
+                            <select id="calc-merch-type" onchange="runFullCalculation()" class="w-full bg-white dark:bg-pixie-900 border border-pixie-500/30 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 dark:text-white">
+                                <option value="PC">Photocard (Flat Tax Rate)</option>
+                                <option value="POSTCARD">Postcard / Mini Poster</option>
+                                <option value="ALBUM">Album Standard / Kihno (Per Gram Tax)</option>
+                                <option value="DOLL">Doll / Plushie / Merch Berat (Per Gram Tax)</option>
+                            </select>
+                        </div>
+
+                        <!-- Price & Weight Inputs -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-900 dark:text-pixie-300 mb-1" id="lbl-item-price">Harga Barang (Won)</label>
+                                <input type="number" id="calc-raw-price" value="15000" oninput="runFullCalculation()" class="w-full bg-white dark:bg-pixie-900 border border-pixie-500/30 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-900 dark:text-pixie-300 mb-1">Estimasi Berat (Gram)</label>
+                                <input type="number" min="0" id="calc-weight-gram" value="350" step="50" oninput="runFullCalculation()" class="w-full bg-white dark:bg-pixie-900 border border-pixie-500/30 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 dark:text-white">
+                            </div>
+                        </div>
+
+                        <!-- Country Logistics Inputs (Dynamic defaults) -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-900 dark:text-pixie-300 mb-1">Ship Lokal Supplier</label>
+                                <input type="number" id="calc-local-ship" value="2500" oninput="runFullCalculation()" class="w-full bg-white dark:bg-pixie-900 border border-pixie-500/30 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-900 dark:text-pixie-300 mb-1">Fee Transfer (IDR)</label>
+                                <input type="number" id="calc-fee-tf" value="7000" oninput="runFullCalculation()" class="w-full bg-white dark:bg-pixie-900 border border-pixie-500/30 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-900 dark:text-pixie-300 mb-1">Fee Admin GO (IDR)</label>
+                                <input type="number" id="calc-fee-admin" value="7000" oninput="runFullCalculation()" class="w-full bg-white dark:bg-pixie-900 border border-pixie-500/30 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 dark:text-white">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- OUTPUT COST BREAKDOWN CARD -->
+                    <div class="lg:col-span-5 glass-card p-6 rounded-2xl border border-pixie-500/30 flex flex-col justify-between space-y-4">
+                        <div class="space-y-3">
+                            <h3 class="text-xs font-extrabold text-pixie-700 dark:text-pixie-300 uppercase tracking-wider pb-2 border-b">
+                                Breakdown Perhitungan Estimasi
+                            </h3>
+
+                            <div class="space-y-2 text-xs text-slate-800 dark:text-pixie-200">
+                                <div class="flex justify-between">
+                                    <span>Harga Clean (Barang + Ship + Fee TF):</span>
+                                    <span id="out-clean-price" class="font-extrabold text-slate-900 dark:text-white">Rp 0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Fee Jasa Admin GO:</span>
+                                    <span id="out-admin-fee" class="font-extrabold text-slate-900 dark:text-white">Rp 0</span>
+                                </div>
+                                <div class="flex justify-between border-t border-dashed pt-2">
+                                    <span class="font-bold">TOTAL HARGA BERSIH:</span>
+                                    <span id="out-total-clean" class="font-extrabold text-purple-600 dark:text-purple-300">Rp 0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Estimasi Tax & WH:</span>
+                                    <span id="out-tax-est" class="font-extrabold text-pink-600 dark:text-pink-300">Rp 0</span>
+                                </div>
+                            </div>
+
+                            <div class="pt-4 border-t border-pixie-500/30">
+                                <span class="text-xs font-bold text-slate-600 dark:text-pixie-400">ESTIMASI TOTAL KELUAR (CLEAN + TAX):</span>
+                                <div class="text-3xl font-extrabold text-amber-600 dark:text-amber-300 mt-1" id="out-grand-total">Rp 0</div>
+                                <p class="text-[10px] text-slate-500 dark:text-pixie-400 mt-1">*Sudah termasuk rate Indonesia +Rp 3k & fee handling.</p>
+                            </div>
+                        </div>
+
+                        <!-- LINE ADMIN DIRECT LINK BUTTON FOR PERS-ORDER -->
+                        <div class="space-y-2 pt-2">
+                            <a id="btn-line-persod" href="https://line.me/R/ti/p/@pixiedust_go" target="_blank" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold flex items-center justify-center gap-2 shadow-lg transition">
+                                <i class="fa-brands fa-line text-lg"></i> Fix Personal Order via LINE Admin Zeazee / Maria
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: REKAPAN BUYER & SISTEM DENDA PAYMENT -->
+        <section id="tab-recap" class="tab-content hidden space-y-6">
+            <div class="glass-panel p-6 rounded-3xl border border-pixie-500/30 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white card-header-title flex items-center gap-2">
+                            <i class="fa-solid fa-box-open text-pixie-500"></i> Rekapan Jajanan
+                        </h2>
+                        <p class="text-xs text-slate-700 dark:text-pixie-300 text-muted-custom mt-1">
+                            Rekapan mengikuti spreadsheet GO Pixiedust, diperiksa setiap 5 menit. Operslot berlaku setelah persetujuan Zeazee.
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="text" id="search-recap-input" oninput="recapPage=1;renderBuyerRecapTable()" placeholder="Cari item / username..." class="bg-white dark:bg-pixie-900 border border-pixie-500/30 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 dark:text-white">
+                    </div>
+                </div>
+
+                <div id="line-card" class="glass-card p-5 rounded-2xl space-y-3"><h3 class="font-extrabold">Hubungkan jajananmu ♡</h3><p class="text-xs">Setelah konfirmasi email dan masuk, kirim nama LINE persis seperti di spreadsheet. Zeazee memverifikasi sekali, lalu rekapan pribadi muncul otomatis setiap kamu masuk.</p><div id="line-link-panel"></div><p id="line-message" role="status" class="text-xs"></p></div>
+                <div class="glass-card p-4 rounded-2xl space-y-2"><p id="sheet-sync-status" role="status" class="text-xs"></p><button class="pixie-button" onclick="refreshData()">Muat ulang rekapan</button><button class="pixie-button owner-only hidden" onclick="syncNow(this)">Sinkronkan spreadsheet sekarang</button></div>
+                <div id="line-review-panel" class="owner-only hidden glass-card p-5 rounded-2xl space-y-3"></div>
+                <div class="flex flex-wrap gap-3 items-center text-xs"><label>Sheet <select id="sheet-filter" class="pixie-input" onchange="recapPage=1;renderBuyerRecapTable()"><option value="">Semua sheet</option></select></label><label class="owner-only hidden flex items-center gap-2"><input id="my-items-filter" type="checkbox" onchange="recapPage=1;renderBuyerRecapTable()">Item akun saya</label><a href="https://bit.ly/RekapanPixiedustGO" target="_blank" rel="noopener noreferrer" class="owner-only hidden underline">Spreadsheet sumber ↗</a><label>Kategori<select id="category-filter" class="pixie-input" onchange="recapPage=1;renderBuyerRecapTable()"><option value="">Semua jajanan</option><option value="china">Batch China</option><option value="korea">Batch Korea</option><option value="jepang">Batch Jepang</option><option value="thailand">Batch Thailand</option><option value="ina">Batch INA</option><option value="po">PO CH</option></select></label><label>Status barang<select id="fulfillment-filter" class="pixie-input" onchange="recapPage=1;renderBuyerRecapTable()"><option value="">Semua status</option><option value="checkout">Sudah checkout</option><option value="admin">Nimbun di rumah admin</option><option value="unknown">Belum ada keterangan</option></select></label><span id="recap-count"></span></div>
+                <!-- ITEM CARDS / TABLE DISPLAY -->
+                <div class="overflow-x-auto rounded-2xl border border-pixie-500/20">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-pixie-200 dark:bg-pixie-900/90 text-pixie-950 dark:text-pixie-200 font-extrabold uppercase">
+                            <tr><th class="p-3.5">Barang / Grup</th><th class="p-3.5">Buyer LINE</th><th class="p-3.5">Sheet / Batch</th><th class="p-3.5">Qty · Harga · Total</th><th class="p-3.5">DP / Tax</th><th class="p-3.5">Pembayaran</th><th class="p-3.5">Keterangan</th><th class="p-3.5">Aksi</th></tr>
+                        </thead>
+                        <tbody id="recap-table-body" class="divide-y divide-pixie-500/10 text-slate-900 dark:text-pixie-200">
+                            <!-- Populated dynamically via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="recap-pagination" class="flex items-center gap-4 text-sm"></div>
+                <div class="glass-card p-4 rounded-2xl space-y-3"><h3 class="font-extrabold">Pengajuan operslot</h3><p class="text-xs">Ajukan dari tombol pada item milik akunmu. Jika belum terhubung, ajukan nama LINE melalui formulir di atas.</p><div id="transfer-list" class="space-y-3"></div></div>
+
+            </div>
+        </section>
+
+        <!-- TAB 4: TNC / RULES & ADMIN TEAM PROFILES -->
+        <section id="tab-tax" class="tab-content hidden space-y-6"></section>
+        <section id="tab-merch" class="tab-content hidden space-y-6">
+          <div class="glass-card p-6 rounded-2xl"><p class="brand-eyebrow">A LITTLE MAGIC, READY FOR YOU</p><h2 class="text-2xl font-extrabold">Merch Available</h2><p>Temukan wishlist-mu. Harga bersih INA, langsung hubungi admin untuk ketersediaan.</p></div>
+          <form class="owner-only hidden glass-card p-5 rounded-2xl space-y-3" onsubmit="uploadMerch(event)"><h3 class="font-extrabold">Tambah merch available</h3><label class="block">Nama merch<input class="pixie-input" name="name" required maxlength="150"></label><label class="block">Harga bersih INA (Rp)<input class="pixie-input" name="price" type="number" min="0" step="1" required></label><label class="block">Foto merch · maksimal 4 MB<input class="pixie-input" name="photo" type="file" accept="image/*" required></label><p class="text-xs">Watermark PIXIEDUST GO ditambahkan otomatis sebelum foto diterbitkan.</p><button class="pixie-button">Terbitkan merch</button><p class="form-status" role="status"></p></form>
+          <div id="merch-list" class="merch-grid"></div>
+        </section>
+        <section id="tab-tnc" class="tab-content hidden space-y-6">
+            
+            <!-- ADMIN TEAM PRESENTATION -->
+            <div class="glass-panel p-6 rounded-3xl border border-pixie-500/30 space-y-4">
+                <div class="flex justify-between items-center pb-2 border-b border-pixie-500/20">
+                    <div>
+                        <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white card-header-title flex items-center gap-2">
+                            <i class="fa-solid fa-users-gear text-pixie-500"></i> Tim Admin GO Pixiedust
+                        </h2>
+                        <p class="text-xs text-slate-700 dark:text-pixie-300 text-muted-custom">Pengelola Group Order & Logistik Pixiedust.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Admin 1: Zeazee -->
+                    <div class="glass-card p-5 rounded-2xl border border-purple-500/30 text-center space-y-2">
+                        <div class="w-16 h-16 mx-auto rounded-full gradient-btn flex items-center justify-center text-2xl text-white shadow-lg">👑</div>
+                        <h3 class="text-base font-extrabold text-slate-900 dark:text-white"><a href="https://x.com/jiahaocantik" target="_blank" rel="noopener noreferrer">Zeazee ↗</a></h3>
+                        <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-purple-500/20 text-purple-700 dark:text-purple-300 border">Owner & Admin Nyelem + Rekapan</span>
+                        <p class="text-xs text-slate-600 dark:text-pixie-300">Penanggung jawab utama checkout internasional, keuangan, dan data batch GO.</p>
+                    </div>
+
+                    <!-- Admin 2: Nist -->
+                    <div class="glass-card p-5 rounded-2xl border border-emerald-500/30 text-center space-y-2">
+                        <div class="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-2xl text-white shadow-lg">📦</div>
+                        <h3 class="text-base font-extrabold text-slate-900 dark:text-white"><a href="https://x.com/omagawsh" target="_blank" rel="noopener noreferrer">Nist ↗</a></h3>
+                        <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border">Admin Packing & Logistik</span>
+                        <p class="text-xs text-slate-600 dark:text-pixie-300">Spesialis safety packing 4-lapis, toploader, & pengiriman ekspedisi lokal.</p>
+                    </div>
+
+                    <!-- Admin 3: Maria / Customizable Admin -->
+                    <div class="glass-card p-5 rounded-2xl border border-pink-500/30 text-center space-y-2 relative">
+                        <div class="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center text-2xl text-white shadow-lg">🔍</div>
+                        <h3 class="text-base font-extrabold text-slate-900 dark:text-white" id="admin-nyelem-name-display">Maria</h3>
+                        <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-pink-500/20 text-pink-700 dark:text-pink-300 border">Admin Nyelem Assistant</span>
+                        <p class="text-xs text-slate-600 dark:text-pixie-300">Hunting merco & PC di Mercari JP, Xianyu CN, & X (Twitter).</p>
+                        
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- AUTHENTIC 22 RULES TNC GO PIXIEDUST -->
+            <div class="glass-panel p-6 rounded-3xl border border-pixie-500/30 space-y-4">
+                <h2 class="text-xl font-extrabold text-slate-900 dark:text-white card-header-title flex items-center gap-2">
+                    <i class="fa-solid fa-scroll text-pixie-500"></i> Rules GO Pixiedust (22 Points Official T&C)
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-slate-800 dark:text-pixie-200" id="tnc-rules-list">
+                    <!-- 22 Rules auto generated via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: FAQ SECTION -->
+        <section id="tab-faq" class="tab-content hidden space-y-6">
+            <div class="glass-panel p-6 rounded-3xl border border-pixie-500/30 space-y-4">
+                <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white card-header-title flex items-center gap-2">
+                    <i class="fa-solid fa-circle-question text-pixie-500"></i> FAQ & Panduan Istilah Group Order
+                </h2>
+                <form class="owner-only hidden glass-card p-5 rounded-2xl space-y-3" onsubmit="saveFaq(event)"><h3 class="font-extrabold">Kelola FAQ</h3><input type="hidden" name="id"><label class="block">Pertanyaan<input class="pixie-input" name="question" required maxlength="300"></label><label class="block">Jawaban<textarea class="pixie-input" name="answer" required maxlength="3000"></textarea></label><button class="pixie-button">Simpan FAQ</button><button type="reset" class="pixie-button">Batal edit</button><p class="form-status" role="status"></p></form><div id="custom-faq" class="space-y-3"></div><div class="space-y-3" id="faq-accordion-container">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 6: RATING, TESTIMONI & SARAN BUYER -->
+        <section id="tab-feedback" class="tab-content hidden space-y-6">
+            <div class="glass-panel p-6 rounded-3xl border border-pixie-500/30 space-y-6">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white card-header-title flex items-center gap-2">
+                        <i class="fa-solid fa-star text-amber-400"></i> Rating, Testimoni & Saran Buyer
+                    </h2>
+                    <p class="text-xs text-slate-700 dark:text-pixie-300 text-muted-custom mt-1">Ulasan jujur dari jajaners GO Pixiedust!</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div class="lg:col-span-5 space-y-4">
+                      <div class="glass-card p-5 rounded-2xl"><h3 class="font-extrabold">Cerita jajan, dari buyer kami ♡</h3><p class="text-sm mt-2">Cek Testimoni dari buyer lain. Bagikan juga pengalaman dan penilaianmu di website.</p><a class="pixie-button inline-block mt-4" href="https://id.shp.ee/SMLH2oie" target="_blank" rel="noopener noreferrer">Kunjungi Shopee ↗</a></div>
+                      <form id="testimonial-form" onsubmit="uploadTestimonial(event)" class="owner-only hidden glass-card p-5 rounded-2xl space-y-3">
+                        <h3 class="font-extrabold">Unggah testimoni · Owner</h3>
+                        <label class="block text-xs">Nama buyer<input name="author" required maxlength="100" class="pixie-input"></label>
+                        <label class="block text-xs">Sumber<select name="source" class="pixie-input"><option>Shopee</option><option>LINE</option></select></label>
+                        <label class="block text-xs">Cerita buyer<textarea name="caption" required maxlength="1500" class="pixie-input" rows="3"></textarea></label>
+                        <label class="block text-xs">Foto testimoni (maks. 4 MB)<input name="photo" type="file" accept="image/jpeg,image/png,image/webp" required class="pixie-input" onchange="previewPhoto(this)"></label>
+                        <p class="text-xs">Samarkan alamat, nomor telepon, dan data pribadi sebelum unggah. Foto yang tersimpan otomatis diberi watermark GO PIXIEDUST.</p>
+                        <img id="photo-preview" alt="Pratinjau foto sebelum diberi watermark" class="hidden rounded-xl max-h-60">
+                        <button class="pixie-button w-full">Publikasikan dengan watermark</button><p id="upload-message" role="status" class="text-xs"></p>
+                      </form>
+                    </div>
+
+                    <!-- Testimonial List -->
+                    <div class="lg:col-span-7 space-y-3"><button class="pixie-button" onclick="openBuyerReview()">Tulis testimoni & rating</button><div id="all-buyer-reviews" class="space-y-4"></div><div class="space-y-3" id="testimonial-list-container">
+                        <!-- Populated via JS -->
+                    </div></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="login-modal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Login akun">
+      <div class="glass-panel max-w-sm w-full p-6 rounded-3xl space-y-4">
+        <div class="flex justify-between"><h3 class="font-extrabold">Akun GO Pixiedust</h3><button onclick="closeLoginModal()" aria-label="Tutup">✕</button></div>
+        <p class="text-xs">Buyer mendaftar dengan email dan password pilihan sendiri. Konfirmasi email diperlukan untuk akun baru.</p><p class="text-xs">Setelah konfirmasi email, masuk dan kirim nama LINE di menu Jajanan. Setelah diverifikasi admin, rekapanmu terhubung otomatis.</p>
+        <div id="auth-tabs" class="grid grid-cols-2 gap-2" role="group" aria-label="Pilih masuk atau daftar">
+          <button id="login-tab" type="button" class="pixie-button" aria-pressed="true" onclick="setAuthMode('login')">Masuk</button>
+          <button id="signup-button" type="button" class="pixie-button" aria-pressed="false" onclick="setAuthMode('signup')">Daftar akun</button>
+        </div>
+        <p id="auth-help" class="text-xs">Masuk menggunakan email dan password akunmu. Khusus owner, gunakan nama Zeazee sebagai pengganti email.</p>
+        <form id="auth-form" class="space-y-3" onsubmit="authenticate(event, authMode)">
+          <label class="block text-xs"><span id="auth-email-label">Email atau nama owner</span><input id="auth-email" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required class="pixie-input"></label>
+          <label class="block text-xs">Password<span class="password-field"><input id="auth-password" type="password" autocomplete="current-password" minlength="8" required class="pixie-input"><button type="button" class="password-toggle" onclick="togglePassword('auth-password',this)" aria-label="Tampilkan password" aria-pressed="false"><i class="fa-solid fa-eye" aria-hidden="true"></i></button></span></label>
+          <label id="auth-password-confirm-label" class="block text-xs hidden">Ulangi password<span class="password-field"><input id="auth-password-confirm" oninput="this.setCustomValidity('')" type="password" autocomplete="new-password" minlength="8" class="pixie-input"><button type="button" class="password-toggle" onclick="togglePassword('auth-password-confirm',this)" aria-label="Tampilkan password" aria-pressed="false"><i class="fa-solid fa-eye" aria-hidden="true"></i></button></span></label>
+          <button id="auth-submit" class="pixie-button w-full" type="submit">Masuk</button>
+          <button type="button" onclick="authenticate(event,'recover')" class="text-xs underline">Lupa password</button>
+          <div id="auth-providers" class="space-y-2"></div>
+        </form>
+        <form id="confirmation-form" class="hidden space-y-3" onsubmit="confirmAccount(event)">
+          <p class="text-xs">Periksa kotak masuk atau folder spam. Klik tautan konfirmasi di email agar langsung masuk, atau tempel token konfirmasi dari email di bawah ini.</p>
+          <label class="block text-xs">Token konfirmasi<input id="confirmation-token" required autocomplete="off" class="pixie-input"></label>
+          <button class="pixie-button w-full" type="submit">Konfirmasi dan masuk</button>
+        </form>
+        <button id="logout-button" onclick="authenticate(event,'logout')" class="pixie-button hidden">Keluar akun</button>
+        <p id="auth-message" role="status" class="text-xs"></p>
+      </div>
+    </div>
+    <button id="floating-line" type="button" class="pixie-button hidden" onclick="openLinePanel()"><i class="fa-brands fa-line" aria-hidden="true"></i> <span id="floating-line-label">Drop DN LINE ♡</span></button>
+    <dialog id="reset-dialog" class="pixie-dialog"><form id="reset-form" onsubmit="resetPassword(event)" class="space-y-3"><h3 class="font-extrabold text-xl">Buat password baru</h3><p class="text-sm">Tautan email berhasil dikonfirmasi. Masukkan password baru minimal 8 karakter.</p><label class="block text-xs">Password baru<span class="password-field"><input id="reset-password" type="password" class="pixie-input" required minlength="8" maxlength="200" autocomplete="new-password"><button type="button" class="password-toggle" onclick="togglePassword('reset-password',this)" aria-label="Tampilkan password" aria-pressed="false"><i class="fa-solid fa-eye" aria-hidden="true"></i></button></span></label><label class="block text-xs">Ulangi password baru<span class="password-field"><input id="reset-confirm" oninput="this.setCustomValidity('')" type="password" class="pixie-input" required minlength="8" maxlength="200" autocomplete="new-password"><button type="button" class="password-toggle" onclick="togglePassword('reset-confirm',this)" aria-label="Tampilkan password" aria-pressed="false"><i class="fa-solid fa-eye" aria-hidden="true"></i></button></span></label><button class="pixie-button" type="submit">Simpan password baru</button><p id="reset-message" role="status" class="text-sm"></p></form></dialog>
+    <dialog id="edit-dialog" class="pixie-dialog"><form id="edit-form" onsubmit="saveItem(event)" class="space-y-3">
+      <h3 class="font-extrabold text-xl">Kelola rekapan · Zeazee</h3><p class="text-xs">Email buyer menghubungkan item dengan akun yang boleh mengajukan operslot.</p>
+      <div id="edit-fields" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+      <div class="flex gap-3"><button class="pixie-button">Simpan perubahan</button><button type="button" onclick="document.getElementById('edit-dialog').close()">Batal</button></div>
+    </form></dialog>
+    <dialog id="transfer-dialog" class="pixie-dialog"><form onsubmit="submitTransfer(event)" class="space-y-3">
+      <h3 class="font-extrabold text-xl">Ajukan operslot</h3><p id="transfer-item" class="text-sm"></p>
+      <p class="text-xs">Buyer belum berubah sampai Zeazee menyetujui pengajuan ini. Pastikan pembayaran sesuai aturan GO.</p>
+      <label class="block text-xs">Nama LINE buyer penerima<input id="transfer-name" maxlength="100" required class="pixie-input"></label>
+      <label class="block text-xs">Email akun buyer penerima<input id="transfer-email" type="email" required class="pixie-input"></label>
+      <button class="pixie-button">Kirim ke Zeazee</button><button type="button" onclick="document.getElementById('transfer-dialog').close()">Batal</button>
+    </form></dialog>
+
+    <!-- JAVASCRIPT APPLICATION LOGIC -->
+    <script>
+        // GLOBAL APP STATE
+        let currentUser = "Pengunjung";
+        let activeCalcCountry = "KR";
+
+        // EDITABLE RATES STATE (ADMIN GO CONTROLLED)
+        let goRates = {
+            KR: 13.85,
+            CN: 2730,
+            TH: 550,
+            JP: 118,
+            INA: 3000
+        };
+
+        // BUYERS RECAP DATA & DENDA AUTOMATION
+        const recapItems = [];
+
+        // 22 OFFICIAL TNC RULES DATA
+        const tnc22Rules = [
+            "1. Coret & konfirmasi = Fix Buy (tidak bisa cancel)",
+            "2. Cek video condition (vidcon) max 15 menit, no respon = lanjut beli",
+            "3. Wajib payment sebelum operslot (os)",
+            "4. No request sharing (reqshare) di atas 23.00 WIB",
+            "5. Telat payment tanpa konfirmasi max 1x24 jam, HNR lebih dari 3x24 jam spill di sbt dan x",
+            "6. Operslot (os) wajib mention admin yg upnotes di notesnya",
+            "7. Steal hanya saat diizinkan admin",
+            "8. Dilarang WTO & promosi GO lain",
+            "9. Invite teman wajib izin, risiko ditanggung pengundang",
+            "10. Barang hilang/rusak saat pengiriman di luar tanggung jawab admin (tetap dibantu follow up).",
+            "11. Kalau scam? Jajan dari GO: refund 50%, reqshare/persod dari buyer: bukan tanggung jawab admin",
+            "12. Batas nimbun max 2x event co, lebih dari itu risiko ditanggung buyer",
+            "13. Jika lama tidak dicheckout & tanpa konfirmasi barang jadi milik GO & bisa dijual/lelang",
+            "14. Ambil atau wh di luar tanggung jawab admin",
+            "15. Pastikan alamat co benar, kesalahan dari buyer bukan tanggung jawab admin",
+            "16. Kerusakan oleh kurir atau wh di luar tanggung jawab admin",
+            "17. Personal Order (Persod), pastikan sudah cek deskripsi, kondisi & seller. Kesalahan/scam dari link buyer bukan tanggung jawab admin.",
+            "18. Dilarang memalsukan bukti pembayaran. Pelanggan akan dikick & dispill. Buyer yang tidak bayar dengan banyak alasan juga akan dikick & dispill.",
+            "19. Wajib video unboxing jika ingin claim kerusakan akibat kelalaian admin.",
+            "20. Tidak boleh cancel jika sudah setor ke seller kec slight/damage",
+            "21. Pertanyaan umum harap ditanyakan di grup agar bisa dibantu bersama.",
+            "22. Diperbolehkan titip danusan tanpa fee dan seller tidak akan dipublikasi selama masa sharing."
+        ];
+
+        // FAQ DATA
+        const faqItems = [
+            { q: "Apa itu Carpool?", a: "Carpool adalah sistem gabungan ongkir internasional agar lebih hemat biaya pengiriman Fast EMS dari WH Korea/Jepang/China/Thailand ke Indonesia." },
+            { q: "Bagaimana cara perhitungan harga bersih?", a: "Harga Bersih = (Harga Barang + Shipping Lokal Supplier) x Rate Negara + Fee Transfer + Fee Admin GO Pixiedust." },
+            { q: "Apa bedanya GO 1 dan GO 2?", a: "GO 1 khusus mendampingi stanned group ALD1, &TEAM, dan NouerA. Sedangkan GO 2 melayani SM Stan (EXO, aespa, NCT, H2H, RIIZE)." },
+            { q: "Berapa denda keterlambatan payment?", a: "Denda keterlambatan payment adalah Rp 2.000 / hari jika melebihi batas konfirmasi 1x24 jam." }
+        ];
+
+        // TESTIMONIALS DATA
+        const testimonials = [];
+
+        // CORE NAVIGATION
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(`tab-${tabId}`);
+            if (target) target.classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-pixie-600', 'text-white');
+                btn.classList.add('text-pixie-900', 'dark:text-pixie-300');
+            });
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-pixie-600', 'text-white');
+                activeBtn.classList.remove('text-pixie-900', 'dark:text-pixie-300');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.className = 'fa-solid fa-sun text-amber-500';
+            } else {
+                html.classList.add('dark');
+                icon.className = 'fa-solid fa-moon text-pixie-200';
+            }
+            document.getElementById('theme-toggle').setAttribute('aria-pressed', html.classList.contains('dark'));
+            try { localStorage.setItem('pixiedust-theme', html.classList.contains('dark') ? 'dark' : 'light'); } catch {}
+        }
+
+        function closeBanner() {
+            document.getElementById('tax-notification-banner').classList.add('hidden');
+        }
+
+        // ADMIN RATE CONTROLS
+        function toggleAdminRatePanel() {
+            document.getElementById('admin-rate-panel').classList.toggle('hidden');
+        }
+
+        function saveAdminRates() {
+            goRates.KR = parseFloat(document.getElementById('inp-rate-KR').value) || 13.85;
+            goRates.CN = parseFloat(document.getElementById('inp-rate-CN').value) || 2730;
+            goRates.TH = parseFloat(document.getElementById('inp-rate-TH').value) || 550;
+            goRates.JP = parseFloat(document.getElementById('inp-rate-JP').value) || 118;
+            goRates.INA = parseFloat(document.getElementById('inp-rate-INA').value) || 3000;
+
+            document.getElementById('rate-disp-KR').innerText = goRates.KR + " IDR";
+            document.getElementById('rate-disp-CN').innerText = goRates.CN.toLocaleString('id-ID') + " IDR";
+            document.getElementById('rate-disp-TH').innerText = goRates.TH + " IDR";
+            document.getElementById('rate-disp-JP').innerText = goRates.JP + " IDR";
+            document.getElementById('rate-disp-INA').innerText = "+Rp " + goRates.INA.toLocaleString('id-ID');
+
+            runFullCalculation();
+            alert("✅ Rate GO berhasil diperbarui oleh Admin!");
+            toggleAdminRatePanel();
+        }
+
+        // CALCULATOR ENGINE
+        function selectCalcCountry(code) {
+            activeCalcCountry = code;
+            document.querySelectorAll('.c-select-btn').forEach(btn => {
+                btn.className = 'c-select-btn p-3 rounded-xl border text-center flex flex-col items-center bg-pixie-200 dark:bg-pixie-900/40 text-slate-900 dark:text-pixie-300 border-pixie-500/30 font-bold';
+            });
+            document.getElementById(`c-btn-${code}`).className = 'c-select-btn p-3 rounded-xl border text-center flex flex-col items-center bg-pixie-600 text-white font-bold';
+
+            const lbl = document.getElementById('lbl-item-price');
+            if (code === 'KR') { lbl.innerText = "Harga Barang (Won)"; document.getElementById('calc-raw-price').value = 15000; document.getElementById('calc-local-ship').value = 2500; }
+            else if (code === 'CN') { lbl.innerText = "Harga Barang (RMB/Yuan)"; document.getElementById('calc-raw-price').value = 75; document.getElementById('calc-local-ship').value = 8; }
+            else if (code === 'JP') { lbl.innerText = "Harga Barang (Yen)"; document.getElementById('calc-raw-price').value = 1800; document.getElementById('calc-local-ship').value = 0; }
+            else if (code === 'TH') { lbl.innerText = "Harga Barang (Baht)"; document.getElementById('calc-raw-price').value = 350; document.getElementById('calc-local-ship').value = 40; }
+
+            runFullCalculation();
+        }
+
+        function runFullCalculation() {
+            const rawPrice = parseFloat(document.getElementById('calc-raw-price').value) || 0;
+            const weightGram = parseFloat(document.getElementById('calc-weight-gram').value) || 0;
+            const localShip = parseFloat(document.getElementById('calc-local-ship').value) || 0;
+            const feeTf = parseFloat(document.getElementById('calc-fee-tf').value) || 0;
+            const feeAdmin = parseFloat(document.getElementById('calc-fee-admin').value) || 0;
+            const merchType = document.getElementById('calc-merch-type').value;
+
+            document.getElementById('calc-weight-gram').parentElement.classList.toggle('hidden', ['PC','POSTCARD'].includes(merchType));
+            const currentRate = goRates[activeCalcCountry] || 13.85;
+            const cleanPriceRaw = (rawPrice + localShip) * currentRate + feeTf;
+            const totalClean = cleanPriceRaw + feeAdmin + goRates.INA;
+
+            let taxEst = 0;
+            if (merchType === 'PC') {
+                taxEst = (activeCalcCountry === 'CN') ? 7000 : 6000;
+            } else if (merchType === 'POSTCARD') {
+                taxEst = 8000;
+            } else if (merchType === 'ALBUM') {
+                if (activeCalcCountry === 'KR') taxEst = weightGram * 235;
+                else if (activeCalcCountry === 'CN') taxEst = weightGram * 260;
+                else if (activeCalcCountry === 'JP') taxEst = weightGram * 255;
+                else taxEst = weightGram * 260;
+            } else if (merchType === 'DOLL') {
+                if (activeCalcCountry === 'CN') taxEst = weightGram * 265;
+                else taxEst = weightGram * 250;
+            }
+
+            const grandTotal = totalClean + taxEst;
+            const fmt = (n) => "Rp " + Math.round(n).toLocaleString('id-ID');
+
+            document.getElementById('out-clean-price').innerText = fmt(cleanPriceRaw);
+            document.getElementById('out-admin-fee').innerText = fmt(feeAdmin);
+            document.getElementById('out-total-clean').innerText = fmt(totalClean);
+            document.getElementById('out-tax-est').innerText = merchType === 'POSTCARD' ? 'Rp 8.000–Rp 9.000' : fmt(taxEst);
+            document.getElementById('out-grand-total').innerText = fmt(grandTotal) + (merchType === 'POSTCARD' ? ' – ' + fmt(grandTotal + 1000) : '');
+
+            // Update LINE link
+            const lineBtn = document.getElementById('btn-line-persod');
+            lineBtn.href = `https://line.me/R/ti/p/@pixiedust_go?text=Halo%20Admin%20Pixiedust,%20mau%20fix%20Pers-Order%20${activeCalcCountry}%20Total%20${encodeURIComponent(fmt(grandTotal)+(merchType==='POSTCARD'?' – '+fmt(grandTotal+1000):''))}`;
+        }
+
+        // TNC & FAQ INITIALIZERS
+        function initTNCAndFAQ() {
+            const tncContainer = document.getElementById('tnc-rules-list');
+            tncContainer.innerHTML = tnc22Rules.map(r => `
+                <div class="glass-card p-3 rounded-xl border border-pixie-500/20 flex items-start gap-2">
+                    <i class="fa-solid fa-check text-purple-500 mt-0.5"></i>
+                    <span>${r}</span>
+                </div>
+            `).join('');
+
+            const faqContainer = document.getElementById('faq-accordion-container');
+            faqContainer.innerHTML = faqItems.map(f => `
+                <div class="glass-card p-4 rounded-xl border border-pixie-500/20 space-y-1">
+                    <h4 class="text-xs font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-circle-info text-pixie-500"></i> ${f.q}
+                    </h4>
+                    <p class="text-xs text-slate-700 dark:text-pixie-300 pl-6">${f.a}</p>
+                </div>
+            `).join('');
+
+            renderTestimonials();
+        }
+
+    </script>
+<script src="/app.js"></script>
+<dialog id="welcome-dialog" class="pixie-dialog"><form method="dialog"><h2 class="welcome-message">Welcome to GO Pixiedust!</h2><p class="my-4">Safe group orders, smooth deliveries, and happy collection hauls with Pixiedust</p><button class="pixie-button">Mulai petualangan</button></form></dialog>
+<dialog id="proof-dialog" class="pixie-dialog"><form onsubmit="uploadProof(event)" class="space-y-3"><h2 class="text-xl font-extrabold">Upload bukti pembayaran</h2><p id="proof-item"></p><input type="hidden" name="itemId"><label class="block">Gambar / PDF · maksimal 4 MB<input class="pixie-input" name="proof" type="file" accept="image/*,application/pdf" required></label><p class="text-xs">Bukti menunggu verifikasi admin dan tidak otomatis menandai tagihan lunas.</p><button class="pixie-button">Kirim bukti</button><button type="button" class="pixie-button" onclick="document.getElementById('proof-dialog').close()">Tutup</button><p class="form-status" role="status"></p></form></dialog>
+<dialog id="buyer-review-dialog" class="pixie-dialog review-dialog"><form id="buyer-review-form" onsubmit="sendBuyerReview(event)" class="space-y-4"><div class="flex justify-between gap-3"><div><p class="brand-eyebrow">A LITTLE REVIEW, A LOT OF MAGIC</p><h2 class="font-extrabold text-2xl">Cerita jajanmu</h2></div><button type="button" class="pixie-button" onclick="document.getElementById('buyer-review-dialog').close()" aria-label="Tutup form testimoni">×</button></div><p class="text-sm">Testimoni terbit langsung dan bisa dibaca buyer lain. Nama tampilan boleh dikosongkan.</p><label class="block text-xs">Nama tampilan (opsional)<input class="pixie-input" name="displayName" maxlength="80" placeholder="Buyer Pixiedust"></label><div class="rating-fields"><label>Performa owner<select class="pixie-input" name="owner" required><option value="">Pilih penilaian</option><option value="1">1 · Kurang baik</option><option value="2">2 · Cukup</option><option value="3">3 · Baik</option><option value="4">4 · Baik sekali</option><option value="5">5 · Sangat baik</option></select></label><label>Admin nyelem<select class="pixie-input" name="admin" required><option value="">Pilih penilaian</option><option value="1">1 · Kurang baik</option><option value="2">2 · Cukup</option><option value="3">3 · Baik</option><option value="4">4 · Baik sekali</option><option value="5">5 · Sangat baik</option></select></label><label>Status pengiriman<select class="pixie-input" name="shipping" required><option value="">Pilih penilaian</option><option value="1">1 · Kurang baik</option><option value="2">2 · Cukup</option><option value="3">3 · Baik</option><option value="4">4 · Baik sekali</option><option value="5">5 · Sangat baik</option></select></label><label>Packing<select class="pixie-input" name="packing" required><option value="">Pilih penilaian</option><option value="1">1 · Kurang baik</option><option value="2">2 · Cukup</option><option value="3">3 · Baik</option><option value="4">4 · Baik sekali</option><option value="5">5 · Sangat baik</option></select></label><label>Kejelasan informasi<select class="pixie-input" name="information" required><option value="">Pilih penilaian</option><option value="1">1 · Kurang baik</option><option value="2">2 · Cukup</option><option value="3">3 · Baik</option><option value="4">4 · Baik sekali</option><option value="5">5 · Sangat baik</option></select></label></div><label class="block text-xs">Cerita pengalamanmu<textarea class="pixie-input" name="caption" maxlength="2000" rows="3" placeholder="Apa yang paling kamu suka dari pengalaman jajan kali ini?"></textarea></label><label class="block text-xs">Foto testimoni (opsional, maksimal 4 MB)<input class="pixie-input" name="photo" type="file" accept="image/*"></label><p class="text-xs">Isi cerita atau tambahkan foto. Samarkan alamat dan nomor telepon pada foto sebelum menerbitkannya.</p><button class="pixie-button">Terbitkan testimoni</button><p class="form-status" role="status"></p></form></dialog>
+<button id="chat-launcher" class="chat-launcher" onclick="toggleChat()" aria-controls="chat-panel" aria-expanded="false"><i class="fa-regular fa-comments" aria-hidden="true"></i><span>Chat with admin</span><span id="chat-badge" class="hidden"></span></button>
+<aside id="chat-panel" class="chat-panel hidden" aria-label="Chat dengan admin"><header class="chat-header"><div><p class="brand-eyebrow">A SAFE LITTLE CORNER</p><h2 id="chat-heading">Chat with admin / owner</h2></div><button class="chat-close" onclick="toggleChat(false)" aria-label="Tutup chat">×</button></header><p id="chat-privacy" class="chat-note">Boleh tanya tanpa login dan tanpa nama. Balasan admin muncul di sini saat tersedia. Riwayat terhubung ke browser ini.</p><div id="chat-inbox" class="chat-inbox hidden"></div><div id="chat-messages" class="chat-messages" role="log" aria-live="polite"></div><form id="chat-form" onsubmit="sendChat(event)"><label for="chat-input" class="sr-only">Pesan untuk admin</label><textarea id="chat-input" required maxlength="2000" rows="2" placeholder="Tanya aja, nggak perlu malu…"></textarea><input name="website" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true"><button class="pixie-button">Kirim</button><p id="chat-status" role="status" class="text-xs"></p></form></aside>
+
+<script src="/features.js"></script>
+<script src="/social.js"></script>
+</body>
+</html>
